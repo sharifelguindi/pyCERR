@@ -4,6 +4,7 @@
 
 from datetime import datetime
 import numpy as np
+from collections import OrderedDict
 from pydicom.uid import generate_uid
 from pydicom.dataset import Dataset, FileDataset, FileMetaDataset
 from pydicom.sequence import Sequence
