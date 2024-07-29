@@ -183,7 +183,16 @@ def getROIContourSeq(structNumV, planC):
                 #tempPtsM = np.matmul(np.linalg.inv(Image2VirtualPhysicalTransM), tempPtsM.T)
                 #tempPtsM = np.matmult(Image2PhysicalTransM,tempPtsM)
                 tempPtsM = np.matmul(transM, tempPtsM.T)
-                dsContour.ContourData = tempPtsM[:3,:].flatten(order = "F").tolist()
+                # Extract the first 3 rows (x, y, z coordinates)
+                points = tempPtsM[:3, :]
+
+                # Convert points to a tuple of tuples for hashability
+                points_tuple = tuple(map(tuple, points.T))
+
+                # Use OrderedDict to keep only unique points while preserving order
+                unique_points = OrderedDict.fromkeys(points_tuple)
+                unique_tempPtsM = np.array(list(unique_points.keys())).T
+                dsContour.ContourData = unique_tempPtsM.flatten(order="F").tolist()
                 contourSeq.append(dsContour)
         dsROIContour.ContourSequence = contourSeq
         roiContourSeq.append(dsROIContour)
